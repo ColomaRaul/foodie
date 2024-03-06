@@ -5,11 +5,13 @@ import classes from './image-picker.module.css';
 import Image from 'next/image';
 
 export default function ImagePicker({label, name}: {label: string, name: string}) {
-    const [pickedImage, setPicketImage] = useState(null)
-    const imageInput = useRef();
+    const [pickedImage, setPicketImage] = useState<null|string>()
+    const imageInput = useRef<HTMLInputElement>();
 
     function handlePickClick() {
-        imageInput.current.click();
+        if (imageInput.current) {
+            imageInput.current.click();
+        }
     }
 
     function handleImageChange(event: any) {
@@ -21,7 +23,7 @@ export default function ImagePicker({label, name}: {label: string, name: string}
 
         const fileReader = new FileReader();
         fileReader.onload = (url) => {
-            setPicketImage(fileReader.result);
+            setPicketImage(fileReader.result as string);
         };
         fileReader.readAsDataURL(file);
     }
@@ -40,7 +42,6 @@ export default function ImagePicker({label, name}: {label: string, name: string}
                     id={name} 
                     accept='image/png, image/jpeg' 
                     name={name}
-                    ref={imageInput}
                     onChange={handleImageChange}
                     required
                 />
